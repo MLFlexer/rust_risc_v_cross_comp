@@ -8,25 +8,25 @@
 
   outputs = { self, rust-overlay, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgsCross = nixpkgs.legacyPackages.${system}.pkgsCross.riscv64;
-        rust-bin = rust-overlay.lib.mkRustBin { } pkgsCross.buildPackages;
-        pkgs = import nixpkgs { system = "${system}"; };
-      in {
-        devShells = {
-          default = pkgsCross.mkShell {
-            nativeBuildInputs =
-              [ rust-bin.stable.latest.minimal pkgsCross.pkg-config ];
 
-            depsBuildBuild = [ pkgs.qemu ];
+      {
+        devShells.default = let
+          pkgsCross =
+            nixpkgs.legacyPackages.${system}.pkgsCross.riscv64-embedded;
+          rust-bin = rust-overlay.lib.mkRustBin { } pkgsCross.buildPackages;
+        in pkgsCross.callPackage ({ mkShell, pkg-config, qemu, stdenv, }:
+          mkShell {
+            nativeBuildInputs = [ rust-bin.stable.latest.minimal pkg-config ];
+
+            depsBuildBuild = [ qemu ];
 
             env = {
-              CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER =
-                "${pkgsCross.stdenv.cc.targetPrefix}cc";
-              CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER =
-                "qemu-riscv64"; # Running in emulator
+              CARGO_TARGET_RISCV64GC-UNKNOWN-NONE-ELF_LINKER =
+                "${stdenv.cc.targetPrefix}cc";
+              CARGO_TARGET_RISCV64GC-UNKNOWN-NONE-ELF_RUNNER =
+                "qemu-system-riscv64";
             };
-          };
-        };
+          }) { };
       });
 }
+
