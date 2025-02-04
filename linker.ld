@@ -3,22 +3,17 @@ ENTRY(_start)
 
 SECTIONS
 {
-    . = 0x80200000;
-
+    . = 0x80000000;
     .text : {
-        *(.text.init)
-        *(.text .text.*)
+        KEEP(*(.text._start));
+        *(.text*);
     }
-
-    .rodata : {
-        *(.rodata .rodata.*)
-    }
-
+    . = ALIGN (CONSTANT (COMMONPAGESIZE));
     .data : {
-        *(.data .data.*)
+        *(.data*);
     }
-
-    .bss : {
-        *(.bss .bss.*)
+    . = ALIGN (CONSTANT (COMMONPAGESIZE));
+    .rodata : {
+        *(.rodata*)
     }
 }
