@@ -14,16 +14,20 @@ extern crate panic_halt;
 
 use riscv_rt::entry;
 
+fn write_c(c: u8) {
+    unsafe {
+        while (*UART_LSR & UART_LSR_EMPTY_MASK) == 0 {}
+        *UART_THR = c;
+    }
+}
+
 #[entry]
 fn main() -> ! {
     let hello_str = b"hello, world!";
 
-    unsafe {
         for c in hello_str.iter() {
-        while (*UART_LSR & UART_LSR_EMPTY_MASK) == 0 {}
-        *UART_THR = *c;
+            write_c(*c);
             
         }
-    }
     loop { }
 }
