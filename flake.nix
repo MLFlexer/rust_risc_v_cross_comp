@@ -14,18 +14,18 @@
           pkgsCross =
             nixpkgs.legacyPackages.${system}.pkgsCross.riscv64-embedded;
           rust-bin = rust-overlay.lib.mkRustBin { } pkgsCross.buildPackages;
-        in pkgsCross.callPackage ({ mkShell, pkg-config, qemu, stdenv, }:
+        in pkgsCross.callPackage ({ mkShell, pkg-config, qemu, stdenv }:
           mkShell {
             nativeBuildInputs = [ rust-bin.stable.latest.minimal pkg-config ];
 
-            depsBuildBuild = [ qemu ];
+            depsBuildBuild = [ qemu pkgsCross.buildPackages.gdb ];
 
             env = {
-              CARGO_TARGET_RISCV64GC-UNKNOWN-NONE-ELF_LINKER =
-                "${stdenv.cc.targetPrefix}cc";
-              CARGO_TARGET_RISCV64GC-UNKNOWN-NONE-ELF_RUNNER =
-                "qemu-system-riscv64";
+              # Makes rust-gdb use the riscv64-none-elf-gdb binary
+              RUST_GDB =
+                "${pkgsCross.buildPackages.gdb}/bin/riscv64-none-elf-gdb";
             };
+
           }) { };
       });
 }
