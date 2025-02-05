@@ -16,6 +16,10 @@ fn main() {
 
     // hello_from_c compile and link
     let c_file = "hello_from_c";
+    let target_c_dir = PathBuf::from("target/c");
+    if !target_c_dir.exists() {
+        fs::create_dir_all(&target_c_dir).unwrap();
+    }
     println!("cargo:rerun-if-changed=src/{}.c", c_file);
     Command::new("riscv64-none-elf-gcc")
         .arg("-c")
