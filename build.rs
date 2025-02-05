@@ -13,7 +13,6 @@ fn main() {
 
     println!("cargo:rerun-if-changed=build.rs");
 
-
     // hello_from_c compile and link
     let c_file = "hello_from_c";
     let target_c_dir = PathBuf::from("target/c");
@@ -29,7 +28,7 @@ fn main() {
         .status()
         .expect(&format!("Failed to compile {c_file}.c"));
 
-    Command::new("ar")
+    Command::new("riscv64-none-elf-ar")
         .arg("rcs")
         .arg(format!("target/c/lib{c_file}.a"))
         .arg(format!("target/c/{c_file}.o"))
