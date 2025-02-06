@@ -36,6 +36,8 @@ fn write_c(c: u8) {
     }
 }
 
+use heapless::Vec;
+
 #[entry]
 fn main() -> ! {
     let hello_str = b"hello, world!\n";
@@ -46,7 +48,35 @@ fn main() -> ! {
 
     unsafe { hello_from_c(); }
 
+    let mut xs: Vec<u8, 8> = Vec::new();
+
+    hprintln!("xs: {:?}", xs);
+    xs.push(42);
+    hprintln!("xs: {:?}", xs);
+    xs.push(69);
+    hprintln!("xs: {:?}", xs);
+    xs.pop();
+    hprintln!("xs: {:?}", xs);
+
+
     hprintln!("Hello Semihosting World!");
     debug::exit(debug::EXIT_SUCCESS);
     loop { }
+}
+
+#[cfg(test)]
+extern crate test;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn add(a: u32, b: u32) -> u32 {
+        a + b
+    }
+
+    #[test]
+    fn test_addition() {
+        assert_eq!(add(2, 3), 5);
+    }
 }

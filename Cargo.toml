@@ -8,3 +8,4 @@ riscv-rt = "0.13.0"
 panic-halt = "0.2.0"
 riscv-semihosting = "0.1.2"
 riscv = { version = "0.12.1", features = ["critical-section-single-hart"] }
+heapless = "0.8.0"
