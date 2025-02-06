@@ -10,8 +10,19 @@ const UART_THR: *mut u8 = UART_BASE as *mut u8;     // Transmit Holding Register
 const UART_LSR: *mut u8 = (UART_BASE + 5) as *mut u8; // Line Status Register
 const UART_LSR_EMPTY_MASK: u8 = 0x20;               // Transmitter Empty bit
                                                     // we probably need to enable uart fifo as per https://www.youtube.com/watch?v=HC7b1SVXoKM
+
+#[cfg(not(debug_assertions))]
 extern crate panic_halt;
 
+#[cfg(debug_assertions)]
+#[panic_handler]
+fn panic_handler(info: &core::panic::PanicInfo) -> ! {
+    hprintln!("{}", info);
+    debug::exit(debug::EXIT_SUCCESS);
+    loop {}
+}
+
+use riscv_semihosting::{debug, hprintln};
 use riscv_rt::entry;
 
 extern "C" {
@@ -35,5 +46,7 @@ fn main() -> ! {
 
     unsafe { hello_from_c(); }
 
+    hprintln!("Hello Semihosting World!");
+    debug::exit(debug::EXIT_SUCCESS);
     loop { }
 }
