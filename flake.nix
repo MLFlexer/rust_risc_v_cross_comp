@@ -24,6 +24,8 @@
               # Makes rust-gdb use the riscv64-none-elf-gdb binary
               RUST_GDB =
                 "${pkgsCross.buildPackages.gdb}/bin/riscv64-none-elf-gdb";
+              LIBCLANG_PATH =
+                "${pkgsCross.buildPackages.llvmPackages.libclang.lib}/lib";
             };
 
           }) { };
