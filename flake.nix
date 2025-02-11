@@ -27,8 +27,10 @@
                 "${pkgsCross.buildPackages.gdb}/bin/riscv64-none-elf-gdb";
               LIBCLANG_PATH =
                 "${pkgsCross.buildPackages.llvmPackages.libclang.lib}/lib";
-              LIBRARY_PATH =
-                if is_macOS then "$(xcrun --show-sdk-path)/usr/lib" else "";
+              LIBRARY_PATH = if is_macOS then
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
+              else
+                "";
             };
 
           }) { };
