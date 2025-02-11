@@ -1,5 +1,15 @@
+// --- To only get core 
 #![no_std]
 #![no_main]
+
+// -- This is for bindgen
+#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+
+use core::include;  
+include!("./bindings.rs");
+// ---
 
 // The following info is specific to the Qemu virt machine.
 // The base address is 0x80000000, the UART address base is 0x10000000
@@ -23,11 +33,13 @@ fn write_c(c: u8) {
 
 #[entry]
 fn main() -> ! {
-    let hello_str = b"hello, world!";
+    let hello_str = b"hello, world!\n";
 
-        for c in hello_str.iter() {
-            write_c(*c);
-            
-        }
+    for c in hello_str.iter() {
+        write_c(*c);
+    }
+
+    unsafe { hello_from_c(); }
+
     loop { }
 }
