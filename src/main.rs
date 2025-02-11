@@ -2,12 +2,12 @@
 #![no_std]
 #![no_main]
 
+// -- This is for bindgen
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-
-use core::include;  // Add this line to import the include macro
+use core::include;  
 include!("./bindings.rs");
 // ---
 
@@ -23,10 +23,6 @@ const UART_LSR_EMPTY_MASK: u8 = 0x20;               // Transmitter Empty bit
 extern crate panic_halt;
 
 use riscv_rt::entry;
-
-// extern "C" {
-//     fn hello_from_c() -> ();
-// }
 
 fn write_c(c: u8) {
     unsafe {
