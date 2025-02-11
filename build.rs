@@ -13,6 +13,20 @@ fn main() {
 
     println!("cargo:rerun-if-changed=build.rs");
 
+    // Generate bindings for C code
+    let bindings = bindgen::Builder::default()
+        .header("src/hello_from_c.h")
+        // .clang_arg("--target=riscv64-none-elf")
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+        // .use_core()
+        .generate()
+        .expect("Unable to generate bindings");
+
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    bindings
+        .write_to_file(out_path.join("bindings.rs"))
+        .expect("Couldn't write bindings!");
+
     // hello_from_c compile and link
     let c_file = "hello_from_c";
     let target_c_dir = PathBuf::from("target/c");

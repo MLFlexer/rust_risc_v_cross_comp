@@ -1,5 +1,7 @@
+// --- To only get core 
 #![no_std]
 #![no_main]
+// ---
 
 // The following info is specific to the Qemu virt machine.
 // The base address is 0x80000000, the UART address base is 0x10000000
