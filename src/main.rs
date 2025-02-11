@@ -1,6 +1,14 @@
 // --- To only get core 
 #![no_std]
 #![no_main]
+
+#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+
+
+use core::include;  // Add this line to import the include macro
+include!("./bindings.rs");
 // ---
 
 // The following info is specific to the Qemu virt machine.
@@ -16,9 +24,9 @@ extern crate panic_halt;
 
 use riscv_rt::entry;
 
-extern "C" {
-    fn hello_from_c() -> ();
-}
+// extern "C" {
+//     fn hello_from_c() -> ();
+// }
 
 fn write_c(c: u8) {
     unsafe {
