@@ -16,9 +16,7 @@ fn main() {
     // Generate bindings for C code
     let bindings = bindgen::Builder::default()
         .header("src/hello_from_c.h")
-        // .clang_arg("--target=riscv64-none-elf")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
-        // .use_core()
         .generate()
         .expect("Unable to generate bindings");
 
